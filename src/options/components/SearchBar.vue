@@ -253,7 +253,6 @@ onUnmounted(() => {
 .search-bar-container {
   display: flex;
   align-items: center;
-  background-color: rgba(255, 255, 255, 0.1);
   border-radius: var(--search-bar-border-radius, 24px);
   padding: 8px 16px;
   width: var(--search-bar-width, 600px);
@@ -262,6 +261,8 @@ onUnmounted(() => {
   border: 1px solid rgba(255, 255, 255, 0.2);
   position: relative;
   transition: all 0.3s ease;
+  background-color: rgba(0, 0, 0, 0.2) !important; /* 稍微深一点，压住背景色 */
+  backdrop-filter: blur(20px) saturate(180%); /* 增加饱和度提升，让毛玻璃更透亮 */
 }
 
 .engine-selector {

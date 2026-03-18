@@ -13,7 +13,10 @@ const isLoading = ref(true)
 const wallpaperUrl = ref('')
 const wallpaperType = ref('')
 
-// 默认配置
+// 用于记录当前生成的 Blob URL，以便在切换时释放内存，防止卡顿
+let currentBlobUrl = ''
+
+// 更新默认配置，加入 wallpaper 字段
 const defaultSettings: DBConfig = {
   toolbarDirection: 'left',
   searchBar: {
@@ -23,22 +26,61 @@ const defaultSettings: DBConfig = {
   panels: {
     borderRadius: { value: 20, unit: 'px' },
   },
+  wallpaper: {
+    type: 'preset',
+    idOrUrl: '',
+    mimeType: '',
+  },
 }
 
 const settings = ref<DBConfig>({ ...defaultSettings })
 
-// 计算样式
+// 计算样式[cite: 14]
 const style = computed(() => ({
   '--search-bar-width': `${settings.value.searchBar.width.value}${settings.value.searchBar.width.unit}`,
   '--search-bar-border-radius': `${settings.value.searchBar.borderRadius.value}${settings.value.searchBar.borderRadius.unit}`,
   '--panel-border-radius': `${settings.value.panels.borderRadius.value}${settings.value.panels.borderRadius.unit}`,
 }))
 
-// 初始化：从 IndexedDB 加载设置
+// 应用壁纸的核心逻辑：负责区分预设还是自定义，并从 IndexedDB 提取二进制数据
+async function applyWallpaperSettings(wpConfig: DBConfig['wallpaper']) {
+  if (!wpConfig || !wpConfig.idOrUrl)
+    return
+
+  // 核心优化：如果之前有自定义壁纸的 Blob URL，释放掉它，防止内存泄漏
+  if (currentBlobUrl) {
+    URL.revokeObjectURL(currentBlobUrl)
+    currentBlobUrl = ''
+  }
+
+  wallpaperType.value = wpConfig.mimeType
+
+  if (wpConfig.type === 'preset') {
+    wallpaperUrl.value = wpConfig.idOrUrl
+  }
+  else if (wpConfig.type === 'custom') {
+    // 根据 ID 从 IndexedDB 提取实际的文件 (Blob)
+    const wpItem = await settingsDB.getWallpaper(wpConfig.idOrUrl)
+    if (wpItem) {
+      currentBlobUrl = URL.createObjectURL(wpItem.data)
+      wallpaperUrl.value = currentBlobUrl
+    }
+    else {
+      // 找不到文件时的降级处理
+      wallpaperUrl.value = ''
+    }
+  }
+}
+
+// 初始化：从 IndexedDB 加载设置并恢复壁纸[cite: 14]
 onMounted(async () => {
   try {
     const savedSettings = await settingsDB.getSettings()
-    settings.value = savedSettings
+    // 合并配置，防止旧用户的数据库里缺少 wallpaper 字段导致报错
+    settings.value = { ...defaultSettings, ...savedSettings }
+
+    // 初始化时加载壁纸
+    await applyWallpaperSettings(settings.value.wallpaper)
   }
   catch (error) {
     console.error('Failed to load settings:', error)
@@ -48,7 +90,7 @@ onMounted(async () => {
   }
 })
 
-// 监听设置变化并保存到 IndexedDB
+// 监听设置变化并保存到 IndexedDB[cite: 14]
 watch(
   settings,
   async (newSettings) => {
@@ -63,28 +105,56 @@ watch(
   { deep: true },
 )
 
-function handleWallpaperChange(url: string, type: string) {
-  wallpaperUrl.value = url
-  wallpaperType.value = type
-  showWallpaper.value = false
+// 接收来自 WallpaperPanel 的更新事件
+function handleWallpaperChange(payload: any) {
+  // 1. 立即更新 UI 进行预览
+  if (payload.type === 'preset') {
+    wallpaperUrl.value = payload.idOrUrl
+  }
+  else {
+    // 对于自定义类型，面板组件已经传来了临时预览图 displayUrl
+    wallpaperUrl.value = payload.displayUrl
+  }
+  wallpaperType.value = payload.mimeType
+
+  // 2. 更新配置对象，触发上面的 watch 自动将设置保存到 IndexedDB
+  settings.value.wallpaper = {
+    type: payload.type,
+    idOrUrl: payload.idOrUrl,
+    mimeType: payload.mimeType,
+  }
+
+  // 考虑到用户可能想预览多个壁纸，这里不再强制把 showWallpaper.value 置为 false
+  // 如果你需要点击应用后马上关闭面板，可以取消下面这行的注释：
+  // showWallpaper.value = false
 }
 </script>
 
 <template>
   <div class="aurora-tab-container" :style="style">
-    <!-- 加载状态 -->
     <div v-if="isLoading" class="loading-overlay">
       <div class="loading-spinner" />
     </div>
 
-    <div class="wallpaper-container">
+    <div
+      class="wallpaper-container"
+      :style="
+        wallpaperType === 'image/css-gradient'
+          ? { background: wallpaperUrl }
+          : {}
+      "
+    >
       <img
-        v-if="wallpaperType.startsWith('image')"
+        v-if="
+          wallpaperUrl
+            && wallpaperType.startsWith('image')
+            && wallpaperType !== 'image/css-gradient'
+        "
         :src="wallpaperUrl"
         class="wallpaper"
       >
       <video
-        v-if="wallpaperType.startsWith('video')"
+        v-if="wallpaperUrl && wallpaperType.startsWith('video')"
         :src="wallpaperUrl"
         class="wallpaper"
         autoplay
@@ -172,8 +242,8 @@ function handleWallpaperChange(url: string, type: string) {
   width: 100%;
   height: 100%;
   z-index: 0;
-  /* Placeholder for wallpaper */
-  background: linear-gradient(135deg, #2b5876, #4e4376);
+  background-color: #1a1a1a;
+  overflow: hidden;
 }
 
 .wallpaper {
@@ -189,6 +259,7 @@ function handleWallpaperChange(url: string, type: string) {
   align-items: center;
   z-index: 1;
   transition: filter 0.3s ease;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* 给文字添加微弱阴影 */
 }
 
 .main-content.blurred {
@@ -207,5 +278,6 @@ function handleWallpaperChange(url: string, type: string) {
   bottom: 1.5rem;
   right: 1.5rem;
   z-index: 10;
+  filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8));
 }
 </style>

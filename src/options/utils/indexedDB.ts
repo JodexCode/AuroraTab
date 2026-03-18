@@ -1,8 +1,17 @@
 const DB_NAME = 'AuroraTabDB'
-const DB_VERSION = 1
+const DB_VERSION = 2 // 升级版本号，触发 onupgradeneeded[cite: 13]
 const STORE_NAME = 'settings'
+const WALLPAPER_STORE = 'wallpapers' // 新增壁纸仓库
 
-interface DBConfig {
+// 新增壁纸数据类型
+export interface WallpaperItem {
+  id: string
+  name: string
+  type: string // MIME 类型，如 'image/png', 'video/mp4'
+  data: File | Blob // 核心：直接存二进制对象防卡顿
+}
+
+export interface DBConfig {
   toolbarDirection: 'left' | 'up'
   searchBar: {
     width: { value: number, unit: 'px' | '%' }
@@ -10,6 +19,12 @@ interface DBConfig {
   }
   panels: {
     borderRadius: { value: number, unit: 'px' | '%' }
+  }
+  // 新增：记录当前选用的壁纸状态
+  wallpaper: {
+    type: 'preset' | 'custom'
+    idOrUrl: string
+    mimeType: string
   }
 }
 
@@ -21,6 +36,12 @@ const defaultConfig: DBConfig = {
   },
   panels: {
     borderRadius: { value: 20, unit: 'px' },
+  },
+  // 默认壁纸配置
+  wallpaper: {
+    type: 'preset',
+    idOrUrl: '', // 空字符串可以代表使用默认 CSS 背景
+    mimeType: '',
   },
 }
 
@@ -37,15 +58,22 @@ class SettingsDB {
         resolve()
       }
 
+      // 数据库升级逻辑[cite: 13]
       request.onupgradeneeded = (event) => {
         const db = (event.target as IDBOpenDBRequest).result
+        // 创建设置仓库[cite: 13]
         if (!db.objectStoreNames.contains(STORE_NAME)) {
           db.createObjectStore(STORE_NAME)
+        }
+        // 创建壁纸仓库，使用 id 作为主键
+        if (!db.objectStoreNames.contains(WALLPAPER_STORE)) {
+          db.createObjectStore(WALLPAPER_STORE, { keyPath: 'id' })
         }
       }
     })
   }
 
+  // --- Settings 方法 ---[cite: 13]
   async getSettings(): Promise<DBConfig> {
     if (!this.db)
       await this.init()
@@ -55,9 +83,7 @@ class SettingsDB {
       const store = transaction.objectStore(STORE_NAME)
       const request = store.get('userSettings')
 
-      request.onsuccess = () => {
-        resolve(request.result || defaultConfig)
-      }
+      request.onsuccess = () => resolve(request.result || defaultConfig)
       request.onerror = () => resolve(defaultConfig)
     })
   }
@@ -75,7 +101,51 @@ class SettingsDB {
       request.onerror = () => reject(request.error)
     })
   }
+
+  // --- Wallpaper 方法 ---
+  async getAllWallpapers(): Promise<WallpaperItem[]> {
+    if (!this.db)
+      await this.init()
+    return new Promise((resolve, reject) => {
+      const transaction = this.db!.transaction([WALLPAPER_STORE], 'readonly')
+      const request = transaction.objectStore(WALLPAPER_STORE).getAll()
+      request.onsuccess = () => resolve(request.result || [])
+      request.onerror = () => reject(request.error)
+    })
+  }
+
+  async getWallpaper(id: string): Promise<WallpaperItem | undefined> {
+    if (!this.db)
+      await this.init()
+    return new Promise((resolve, reject) => {
+      const transaction = this.db!.transaction([WALLPAPER_STORE], 'readonly')
+      const request = transaction.objectStore(WALLPAPER_STORE).get(id)
+      request.onsuccess = () => resolve(request.result)
+      request.onerror = () => reject(request.error)
+    })
+  }
+
+  async addWallpaper(wallpaper: WallpaperItem): Promise<void> {
+    if (!this.db)
+      await this.init()
+    return new Promise((resolve, reject) => {
+      const transaction = this.db!.transaction([WALLPAPER_STORE], 'readwrite')
+      const request = transaction.objectStore(WALLPAPER_STORE).put(wallpaper)
+      request.onsuccess = () => resolve()
+      request.onerror = () => reject(request.error)
+    })
+  }
+
+  async deleteWallpaper(id: string): Promise<void> {
+    if (!this.db)
+      await this.init()
+    return new Promise((resolve, reject) => {
+      const transaction = this.db!.transaction([WALLPAPER_STORE], 'readwrite')
+      const request = transaction.objectStore(WALLPAPER_STORE).delete(id)
+      request.onsuccess = () => resolve()
+      request.onerror = () => reject(request.error)
+    })
+  }
 }
 
 export const settingsDB = new SettingsDB()
-export type { DBConfig }

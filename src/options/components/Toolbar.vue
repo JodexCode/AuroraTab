@@ -89,6 +89,7 @@ function toggleToolbar() {
   display: flex;
   align-items: center;
   gap: 12px;
+  mix-blend-mode: difference;
 }
 
 .toolbar-button {
@@ -162,5 +163,12 @@ function toggleToolbar() {
 .slide-up-leave-to {
   opacity: 0;
   transform: translateY(20px) scale(0.9);
+}
+
+.toolbar-button svg,
+.action-button svg {
+  color: white;
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.2));
+  transition: all 0.3s ease;
 }
 </style>
