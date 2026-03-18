@@ -16,8 +16,6 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 9
 
       - name: Set Node.js
         uses: actions/setup-node@v4
@@ -76,7 +74,7 @@ jobs:
             out/aurora-tab-*.xpi
           name: Aurora Tab ${{ github.ref_name }}
           body: ${{ steps.read_note.outputs.body }}
-          generate_release_notes: true 
+          generate_release_notes: true
           fail_on_unmatched_files: true # 如果 files 里的文件没找到，直接让 Action 报错显志
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
