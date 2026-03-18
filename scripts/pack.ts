@@ -1,4 +1,5 @@
 // scripts/pack.ts
+import process from 'node:process'
 import { execSync } from 'node:child_process'
 import { existsSync, mkdirSync } from 'node:fs'
 import { version } from '../package.json'
@@ -10,6 +11,7 @@ if (!existsSync(outDir)) {
 
 const baseName = `aurora-tab-v${version}`
 
+/* eslint-disable no-console */
 console.log(`📦 Starting to pack ${baseName}...`)
 
 try {
