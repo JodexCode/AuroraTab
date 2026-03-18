@@ -1,17 +1,20 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import SearchBar from './components/SearchBar.vue'
 import Toolbar from './components/Toolbar.vue'
 import SettingsPanel from './components/SettingsPanel.vue'
 import WallpaperPanel from './components/WallpaperPanel.vue'
+import { type DBConfig, settingsDB } from './utils/indexedDB'
 
 const showSettings = ref(false)
 const showWallpaper = ref(false)
+const isLoading = ref(true)
 
 const wallpaperUrl = ref('')
 const wallpaperType = ref('')
 
-const settings = ref({
+// 默认配置
+const defaultSettings: DBConfig = {
   toolbarDirection: 'left',
   searchBar: {
     width: { value: 600, unit: 'px' },
@@ -20,13 +23,45 @@ const settings = ref({
   panels: {
     borderRadius: { value: 20, unit: 'px' },
   },
-})
+}
 
+const settings = ref<DBConfig>({ ...defaultSettings })
+
+// 计算样式
 const style = computed(() => ({
   '--search-bar-width': `${settings.value.searchBar.width.value}${settings.value.searchBar.width.unit}`,
   '--search-bar-border-radius': `${settings.value.searchBar.borderRadius.value}${settings.value.searchBar.borderRadius.unit}`,
   '--panel-border-radius': `${settings.value.panels.borderRadius.value}${settings.value.panels.borderRadius.unit}`,
 }))
+
+// 初始化：从 IndexedDB 加载设置
+onMounted(async () => {
+  try {
+    const savedSettings = await settingsDB.getSettings()
+    settings.value = savedSettings
+  }
+  catch (error) {
+    console.error('Failed to load settings:', error)
+  }
+  finally {
+    isLoading.value = false
+  }
+})
+
+// 监听设置变化并保存到 IndexedDB
+watch(
+  settings,
+  async (newSettings) => {
+    try {
+      const rawSettings = JSON.parse(JSON.stringify(newSettings))
+      await settingsDB.saveSettings(rawSettings)
+    }
+    catch (error) {
+      console.error('Failed to save settings:', error)
+    }
+  },
+  { deep: true },
+)
 
 function handleWallpaperChange(url: string, type: string) {
   wallpaperUrl.value = url
@@ -37,6 +72,11 @@ function handleWallpaperChange(url: string, type: string) {
 
 <template>
   <div class="aurora-tab-container" :style="style">
+    <!-- 加载状态 -->
+    <div v-if="isLoading" class="loading-overlay">
+      <div class="loading-spinner" />
+    </div>
+
     <div class="wallpaper-container">
       <img
         v-if="wallpaperType.startsWith('image')"
@@ -95,6 +135,34 @@ function handleWallpaperChange(url: string, type: string) {
   font-family:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
     Arial, sans-serif;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(26, 26, 26, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .wallpaper-container {

@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
+import type { DBConfig } from '../utils/indexedDB'
 
-const props = defineProps<{ settings: any }>()
-const emit = defineEmits(['close', 'update:settings'])
+const props = defineProps<{ settings: DBConfig }>()
+const emit = defineEmits<{
+  'close': []
+  'update:settings': [value: DBConfig]
+}>()
 
 const isOpen = ref(false)
-const localSettings = ref(JSON.parse(JSON.stringify(props.settings)))
+const localSettings = ref<DBConfig>(JSON.parse(JSON.stringify(props.settings)))
 
 watch(
   localSettings,
@@ -17,7 +21,7 @@ watch(
 
 function updateSetting(keyPath: string, value: any) {
   const keys = keyPath.split('.')
-  let current = localSettings.value
+  let current: any = localSettings.value
   for (let i = 0; i < keys.length - 1; i++) {
     current = current[keys[i]]
   }
