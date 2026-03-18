@@ -42,7 +42,7 @@ pnpm dev
 - **基础编译**：
 
 ```bash
-pnpm build
+pnpm run build
 ```
 
 执行后会在 extension/dist 目录下生成可运行的解压扩展文件，适合在浏览器中“加载未打包的扩展程序”进行测试。
@@ -50,7 +50,7 @@ pnpm build
 - **发布打包**：
 
 ```bash
-pnpm pack
+pnpm run pack
 ```
 
 该命令会进一步将编译产物压缩，在根目录下生成 extension.zip、extension.crx 或 extension.xpi（用于 Firefox），直接用于上传至扩展商店。

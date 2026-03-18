@@ -49,5 +49,4 @@ extension/manifest.json
 *.crx
 *.xpi
 *.zip
-extension.zip
-extension.crx
+*.tgz
