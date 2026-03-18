@@ -1,5 +1,9 @@
 # 🌌 Aurora Tab (极光标签页)
 
+[![GitHub stars](https://img.shields.io/github/stars/JodexCode/AuroraTab?style=flat-square)](https://github.com/JodexCode/AuroraTab/stargazers)
+[![GitHub license](https://img.shields.io/github/license/JodexCode/AuroraTab?style=flat-square)](https://github.com/JodexCode/AuroraTab/blob/main/LICENSE)
+[![GitHub last commit](https://img.shields.io/github/last-commit/JodexCode/AuroraTab?style=flat-square)](https://github.com/JodexCode/AuroraTab/commits/main)
+
 一个基于 Vue 3 + Vite 构建的高颜值、高性能浏览器新标签页扩展。提供极简的视觉体验与强大的壁纸管理功能。
 
 ## ✨ 特性
@@ -64,4 +68,5 @@ pnpm pack
 ## 📄 开源协议
 
 本项目采用 **MIT License** 开源。
+
 你可以自由地使用、复制、修改和分发本项目的副本，只需在副本中保留原始版权声明和许可声明即可。作者不对软件的质量或使用后果承担法律责任。
