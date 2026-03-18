@@ -1,0 +1,82 @@
+name: Release Aurora Tab
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Set Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build and Pack
+        run: pnpm run pack
+
+      # 1. 检查打包产物是否存在
+      - name: Check Build Artifacts
+        run: |
+          echo "🔍 正在检查打包产物..."
+          if [ -d "out" ]; then
+            ls -R out/
+            if [ -f out/aurora-tab-*.zip ] || [ -f out/aurora-tab-*.crx ]; then
+              echo "✅ 找到打包产物，准备发布。"
+            else
+              echo "❌ 错误：out 目录下未找到符合命名的 zip 或 crx 文件！"
+              exit 1
+            fi
+          else
+            echo "❌ 错误：out 目录不存在，打包脚本可能未正常运行！"
+            exit 1
+          fi
+
+      # 2. 读取 RELEASE_NOTES.md 并记录日志
+      - name: Read Release Notes
+        id: read_note
+        run: |
+          FILE_NAME="RELEASE_NOTES.md"
+          if [ -f "$FILE_NAME" ]; then
+            echo "📝 找到 $FILE_NAME，正在读取内容..."
+            content=$(cat "$FILE_NAME")
+            # 使用环境变量写入，防止特殊字符导致崩溃
+            {
+              echo "body<<EOF"
+              echo "$content"
+              echo "EOF"
+            } >> "$GITHUB_OUTPUT"
+          else
+            echo "⚠️ 未找到 $FILE_NAME，将使用默认发布说明。"
+            echo "body=🌌 Aurora Tab 新版本发布！" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            out/aurora-tab-*.zip
+            out/aurora-tab-*.crx
+            out/aurora-tab-*.xpi
+          name: Aurora Tab ${{ github.ref_name }}
+          body: ${{ steps.read_note.outputs.body }}
+          generate_release_notes: true 
+          fail_on_unmatched_files: true # 如果 files 里的文件没找到，直接让 Action 报错显志
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

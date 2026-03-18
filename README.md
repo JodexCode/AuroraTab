@@ -55,6 +55,18 @@ pnpm run pack
 
 该命令会进一步将编译产物压缩，在根目录下生成 extension.zip、extension.crx 或 extension.xpi（用于 Firefox），直接用于上传至扩展商店。
 
+## 📥 下载与安装
+
+你可以前往 [Releases 页面](https://github.com/JodexCode/AuroraTab/releases) 下载最新版本的打包文件：
+
+| 文件格式 | 适用浏览器               | 安装说明                                                     |
+| :------- | :----------------------- | :----------------------------------------------------------- |
+| **.zip** | **Chrome / Edge (推荐)** | 下载后解压。在浏览器地址栏输入 `chrome://extensions`，开启“开发者模式”，点击“加载解压的扩展程序”，选择解压后的文件夹即可。 |
+| **.crx** | **Chrome / 开发者版**    | Chrome 的原生打包格式。由于谷歌安全限制，非商店来源的 .crx 可能需要拖入扩展页面安装，且部分版本可能限制运行。 |
+| **.xpi** | **Firefox**              | Firefox 专属格式。需通过 Firefox 的附加组件管理器进行安装（注意：未签名版本仅限 Firefox Nightly 或 Unbranded 版本运行）。 |
+
+> **提示**：对于大多数用户，下载 **.zip** 文件并使用“开发者模式”加载是最稳定、直接的安装方式。
+
 ## 🛠️ 技术栈
 
 - **框架**: Vue 3 (Composition API)

@@ -46,7 +46,4 @@ extension/dist/
 extension/manifest.json 
 
 # 忽略打包后的压缩包
-*.crx
-*.xpi
-*.zip
-*.tgz
+out/
