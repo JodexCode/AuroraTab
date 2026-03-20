@@ -1,10 +1,10 @@
 {
   "name": "aurora-tab",
   "displayName": "Aurora Tab",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "packageManager": "pnpm@9.7.1",
-  "description": "一个极简且美观的浏览器新标签页插件",
+  "description": "一个简约、美观、实用的浏览器新标签页插件",
   "scripts": {
     "dev": "npm run clear && cross-env NODE_ENV=development run-p dev:*",
     "dev-firefox": "npm run clear && cross-env NODE_ENV=development EXTENSION=firefox run-p dev:*",

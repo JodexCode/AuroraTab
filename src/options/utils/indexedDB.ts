@@ -47,6 +47,7 @@ const defaultConfig: DBConfig = {
 
 class SettingsDB {
   private db: IDBDatabase | null = null
+  private initPromise: Promise<void> | null = null
 
   async init(): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -73,10 +74,20 @@ class SettingsDB {
     })
   }
 
+  // 统一的初始化检查，避免重复初始化
+  private async ensureInit(): Promise<IDBDatabase> {
+    if (this.db)
+      return this.db
+    if (!this.initPromise) {
+      this.initPromise = this.init()
+    }
+    await this.initPromise
+    return this.db!
+  }
+
   // --- Settings 方法 ---[cite: 13]
   async getSettings(): Promise<DBConfig> {
-    if (!this.db)
-      await this.init()
+    await this.ensureInit()
 
     return new Promise((resolve) => {
       const transaction = this.db!.transaction([STORE_NAME], 'readonly')
@@ -89,8 +100,7 @@ class SettingsDB {
   }
 
   async saveSettings(settings: DBConfig): Promise<void> {
-    if (!this.db)
-      await this.init()
+    await this.ensureInit()
 
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction([STORE_NAME], 'readwrite')
@@ -104,8 +114,7 @@ class SettingsDB {
 
   // --- Wallpaper 方法 ---
   async getAllWallpapers(): Promise<WallpaperItem[]> {
-    if (!this.db)
-      await this.init()
+    await this.ensureInit()
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction([WALLPAPER_STORE], 'readonly')
       const request = transaction.objectStore(WALLPAPER_STORE).getAll()
@@ -115,8 +124,7 @@ class SettingsDB {
   }
 
   async getWallpaper(id: string): Promise<WallpaperItem | undefined> {
-    if (!this.db)
-      await this.init()
+    await this.ensureInit()
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction([WALLPAPER_STORE], 'readonly')
       const request = transaction.objectStore(WALLPAPER_STORE).get(id)
@@ -126,8 +134,7 @@ class SettingsDB {
   }
 
   async addWallpaper(wallpaper: WallpaperItem): Promise<void> {
-    if (!this.db)
-      await this.init()
+    await this.ensureInit()
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction([WALLPAPER_STORE], 'readwrite')
       const request = transaction.objectStore(WALLPAPER_STORE).put(wallpaper)
@@ -137,8 +144,7 @@ class SettingsDB {
   }
 
   async deleteWallpaper(id: string): Promise<void> {
-    if (!this.db)
-      await this.init()
+    await this.ensureInit()
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction([WALLPAPER_STORE], 'readwrite')
       const request = transaction.objectStore(WALLPAPER_STORE).delete(id)

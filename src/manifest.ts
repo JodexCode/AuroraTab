@@ -60,7 +60,13 @@ export async function getManifest() {
   }
   else {
     // the sidebar_action does not work for chromium based
-    ;(manifest as any).side_panel = {
+    // 使用类型扩展避免 any
+    type ManifestWithSidePanel = Manifest.WebExtensionManifest & {
+      side_panel?: {
+        default_path: string
+      }
+    }
+    (manifest as ManifestWithSidePanel).side_panel = {
       default_path: 'dist/sidepanel/index.html',
     }
   }

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import { watchDebounced } from '@vueuse/core'
 import SearchBar from './components/SearchBar.vue'
 import Toolbar from './components/Toolbar.vue'
 import SettingsPanel from './components/SettingsPanel.vue'
@@ -90,8 +91,8 @@ onMounted(async () => {
   }
 })
 
-// 监听设置变化并保存到 IndexedDB[cite: 14]
-watch(
+// 监听设置变化并保存到 IndexedDB（防抖优化，避免频繁写入）
+watchDebounced(
   settings,
   async (newSettings) => {
     try {
@@ -102,7 +103,7 @@ watch(
       console.error('Failed to save settings:', error)
     }
   },
-  { deep: true },
+  { deep: true, debounce: 300 },
 )
 
 // 接收来自 WallpaperPanel 的更新事件
