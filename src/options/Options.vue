@@ -23,6 +23,11 @@ const wallpaperType = ref('')
 
 let currentBlobUrl = ''
 
+const defaultPreset = {
+  css: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #2193b0 100%)',
+  type: 'image/css-gradient',
+}
+
 const defaultSettings: DBConfig = {
   toolbarDirection: 'left',
   language: getDeviceLocale(),
@@ -49,12 +54,18 @@ const style = computed(() => ({
 }))
 
 async function applyWallpaperSettings(wpConfig: DBConfig['wallpaper']) {
-  if (!wpConfig || !wpConfig.idOrUrl)
+  if (!wpConfig)
     return
 
   if (currentBlobUrl) {
     URL.revokeObjectURL(currentBlobUrl)
     currentBlobUrl = ''
+  }
+
+  if (!wpConfig.idOrUrl) {
+    wallpaperType.value = defaultPreset.type
+    wallpaperUrl.value = defaultPreset.css
+    return
   }
 
   wallpaperType.value = wpConfig.mimeType
