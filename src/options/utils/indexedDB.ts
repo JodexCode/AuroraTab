@@ -1,5 +1,5 @@
 const DB_NAME = 'AuroraTabDB'
-const DB_VERSION = 2 // 升级版本号，触发 onupgradeneeded[cite: 13]
+const DB_VERSION = 3 // 升级版本号，触发 onupgradeneeded
 const STORE_NAME = 'settings'
 const WALLPAPER_STORE = 'wallpapers' // 新增壁纸仓库
 
@@ -13,6 +13,7 @@ export interface WallpaperItem {
 
 export interface DBConfig {
   toolbarDirection: 'left' | 'up'
+  language: 'en' | 'zh'
   searchBar: {
     width: { value: number, unit: 'px' | '%' }
     borderRadius: { value: number, unit: 'px' | '%' }
@@ -30,6 +31,7 @@ export interface DBConfig {
 
 const defaultConfig: DBConfig = {
   toolbarDirection: 'left',
+  language: 'en',
   searchBar: {
     width: { value: 600, unit: 'px' },
     borderRadius: { value: 24, unit: 'px' },

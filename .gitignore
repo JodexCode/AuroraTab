@@ -40,6 +40,7 @@ Thumbs.db
 src/auto-imports.d.ts
 src/components.d.ts
 .eslintcache
+tsconfig.tsbuildinfo
 
 # 忽略 extension 目录下的构建产物
 extension/dist/

@@ -1,36 +1,16 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { onMounted, ref } from 'vue'
 import type { DBConfig } from '../utils/indexedDB'
+import { useI18n } from '~/i18n'
 
-const props = defineProps<{ settings: DBConfig }>()
+withDefaults(defineProps<{ settings: DBConfig }>(), {})
 const emit = defineEmits<{
-  'close': []
-  'update:settings': [value: DBConfig]
+  close: []
 }>()
 
+const { t } = useI18n()
+
 const isOpen = ref(false)
-const localSettings = ref<DBConfig>(JSON.parse(JSON.stringify(props.settings)))
-
-watch(
-  localSettings,
-  (newValue) => {
-    emit('update:settings', newValue)
-  },
-  { deep: true },
-)
-
-function updateSetting(keyPath: string, value: any) {
-  const keys = keyPath.split('.')
-  let current: any = localSettings.value
-  for (let i = 0; i < keys.length - 1; i++) {
-    current = current[keys[i]]
-  }
-  current[keys[keys.length - 1]] = value
-}
-
-const panelStyle = computed(() => ({
-  '--panel-border-radius': `${localSettings.value.panels.borderRadius.value}${localSettings.value.panels.borderRadius.unit}`,
-}))
 
 onMounted(() => {
   isOpen.value = true
@@ -39,9 +19,9 @@ onMounted(() => {
 
 <template>
   <transition name="slide-up">
-    <div v-if="isOpen" class="panel-container" :style="panelStyle">
+    <div v-if="isOpen" class="panel-container">
       <div class="panel-header">
-        <h3>Settings</h3>
+        <h3>{{ t('settings.title') }}</h3>
         <button class="close-btn" @click="emit('close')">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -57,135 +37,8 @@ onMounted(() => {
         </button>
       </div>
       <div class="panel-content">
-        <!-- Toolbar Direction -->
-        <div class="setting-item">
-          <div class="setting-label">
-            <span>Toolbar Direction</span>
-          </div>
-          <div class="segmented-control">
-            <button
-              :class="{ active: localSettings.toolbarDirection === 'left' }"
-              @click="updateSetting('toolbarDirection', 'left')"
-            >
-              Left
-            </button>
-            <button
-              :class="{ active: localSettings.toolbarDirection === 'up' }"
-              @click="updateSetting('toolbarDirection', 'up')"
-            >
-              Up
-            </button>
-          </div>
-        </div>
-
-        <!-- Search Bar Width -->
-        <div class="setting-item">
-          <div class="setting-label">
-            <span>Search Bar Width</span>
-          </div>
-          <div class="input-group">
-            <input
-              v-model.number="localSettings.searchBar.width.value"
-              type="number"
-              class="value-input"
-              @input="
-                updateSetting(
-                  'searchBar.width.value',
-                  ($event.target as HTMLInputElement)?.value,
-                )
-              "
-            >
-            <div class="segmented-control">
-              <button
-                :class="{ active: localSettings.searchBar.width.unit === 'px' }"
-                @click="updateSetting('searchBar.width.unit', 'px')"
-              >
-                px
-              </button>
-              <button
-                :class="{ active: localSettings.searchBar.width.unit === '%' }"
-                @click="updateSetting('searchBar.width.unit', '%')"
-              >
-                %
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Search Bar Border Radius -->
-        <div class="setting-item">
-          <div class="setting-label">
-            <span>Search Bar Radius</span>
-          </div>
-          <div class="input-group">
-            <input
-              v-model.number="localSettings.searchBar.borderRadius.value"
-              type="number"
-              class="value-input"
-              @input="
-                updateSetting(
-                  'searchBar.borderRadius.value',
-                  ($event.target as HTMLInputElement)?.value,
-                )
-              "
-            >
-            <div class="segmented-control">
-              <button
-                :class="{
-                  active: localSettings.searchBar.borderRadius.unit === 'px',
-                }"
-                @click="updateSetting('searchBar.borderRadius.unit', 'px')"
-              >
-                px
-              </button>
-              <button
-                :class="{
-                  active: localSettings.searchBar.borderRadius.unit === '%',
-                }"
-                @click="updateSetting('searchBar.borderRadius.unit', '%')"
-              >
-                %
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Panel Border Radius -->
-        <div class="setting-item">
-          <div class="setting-label">
-            <span>Panel Radius</span>
-          </div>
-          <div class="input-group">
-            <input
-              v-model.number="localSettings.panels.borderRadius.value"
-              type="number"
-              class="value-input"
-              @input="
-                updateSetting(
-                  'panels.borderRadius.value',
-                  ($event.target as HTMLInputElement)?.value,
-                )
-              "
-            >
-            <div class="segmented-control">
-              <button
-                :class="{
-                  active: localSettings.panels.borderRadius.unit === 'px',
-                }"
-                @click="updateSetting('panels.borderRadius.unit', 'px')"
-              >
-                px
-              </button>
-              <button
-                :class="{
-                  active: localSettings.panels.borderRadius.unit === '%',
-                }"
-                @click="updateSetting('panels.borderRadius.unit', '%')"
-              >
-                %
-              </button>
-            </div>
-          </div>
+        <div class="empty-state">
+          <p>{{ t('settings.title') }}</p>
         </div>
       </div>
     </div>
@@ -201,7 +54,7 @@ onMounted(() => {
   background-color: rgba(40, 40, 40, 0.8);
   backdrop-filter: blur(30px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--panel-border-radius, 20px);
+  border-radius: 20px;
   color: white;
   z-index: 1000;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
@@ -242,53 +95,10 @@ onMounted(() => {
   padding: 20px;
 }
 
-.setting-item {
-  margin-bottom: 24px;
-}
-
-.setting-label {
-  margin-bottom: 12px;
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.input-group {
-  display: flex;
-  gap: 8px;
-}
-
-.value-input {
-  flex-grow: 1;
-  background-color: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  color: white;
-  padding: 8px 12px;
-  font-size: 14px;
-  outline: none;
-}
-
-.segmented-control {
-  display: flex;
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  padding: 4px;
-}
-
-.segmented-control button {
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.6);
-  padding: 4px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.segmented-control button.active {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .slide-up-enter-active,

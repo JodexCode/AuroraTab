@@ -1,0 +1,28 @@
+export default {
+  toolbar: {
+    appearance: '外观',
+    settings: '设置',
+    language: '语言',
+  },
+  appearance: {
+    title: '外观',
+    toolbarDirection: '工具栏位置',
+    left: '左侧',
+    up: '顶部',
+    searchBarWidth: '搜索栏宽度',
+    searchBarRadius: '搜索栏圆角',
+    panelRadius: '面板圆角',
+  },
+  settings: {
+    title: '设置',
+  },
+  language: {
+    title: '语言',
+    select: '选择语言',
+  },
+  common: {
+    close: '关闭',
+    px: '像素',
+    percent: '百分比',
+  },
+}

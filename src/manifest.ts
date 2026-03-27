@@ -66,7 +66,7 @@ export async function getManifest() {
         default_path: string
       }
     }
-    (manifest as ManifestWithSidePanel).side_panel = {
+    ;(manifest as ManifestWithSidePanel).side_panel = {
       default_path: 'dist/sidepanel/index.html',
     }
   }
