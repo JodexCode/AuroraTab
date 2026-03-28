@@ -358,8 +358,11 @@ onUnmounted(() => {
   background: transparent;
   border: none;
   outline: none;
-  color: white;
+  color: rgba(255, 255, 255, 0.95);
   font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .suggestions-container {
@@ -402,7 +405,8 @@ onUnmounted(() => {
 }
 
 .search-input::placeholder {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.5);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .search-button {
