@@ -288,7 +288,7 @@ const isAnyPanelOpen = computed(
   justify-content: center;
   align-items: center;
   z-index: 1;
-  transition: filter 0.3s ease;
+  transition: filter 0.25s ease, opacity 0.25s ease;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 

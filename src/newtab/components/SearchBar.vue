@@ -258,12 +258,13 @@ onUnmounted(() => {
   padding: 8px 16px;
   width: var(--search-bar-width, 600px);
   max-width: 90%;
-  backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   position: relative;
-  transition: all 0.3s ease;
-  background-color: rgba(0, 0, 0, 0.2) !important; /* 稍微深一点，压住背景色 */
-  backdrop-filter: blur(20px) saturate(180%); /* 增加饱和度提升，让毛玻璃更透亮 */
+  isolation: isolate;
+  transition: all 0.25s ease;
+  background-color: rgba(0, 0, 0, 0.1);
+  /* 会引起搜索框闪烁，不清楚怎么解决，暂时取消该效果 */
+  /* backdrop-filter: blur(20px) saturate(180%); */
 }
 
 .engine-selector {
