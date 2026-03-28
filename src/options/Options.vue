@@ -26,7 +26,9 @@ const panelMap: Record<string, Ref<boolean>> = {
   wallpaper: showWallpaper,
 }
 
-function openPanel(panel: keyof typeof panelMap) {
+function openPanel(panel: string) {
+  if (!(panel in panelMap))
+    return
   Object.values(panelMap).forEach(p => p.value = false)
   panelMap[panel].value = true
 }
