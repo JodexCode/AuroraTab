@@ -115,7 +115,8 @@ watchDebounced(
 
 function handleWallpaperChange(payload: any) {
   if (payload.type === 'preset') {
-    wallpaperUrl.value = payload.idOrUrl
+    const preset = presets.find(p => p.id === payload.idOrUrl)
+    wallpaperUrl.value = preset?.css || presets[0].css
   }
   else {
     wallpaperUrl.value = payload.displayUrl

@@ -25,6 +25,13 @@ browser.runtime.onInstalled.addListener((): void => {
   console.log('Extension installed')
 })
 
+// Handle bfcache error - suppress the warning when page is cached
+browser.runtime.onConnect.addListener((port) => {
+  port.onDisconnect.addListener(() => {
+    // This is expected when page enters back/forward cache
+  })
+})
+
 let previousTabId = 0
 
 // communication example: send previous tab title from background page
