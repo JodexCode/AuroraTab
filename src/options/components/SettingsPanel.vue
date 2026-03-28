@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import type { DBConfig } from '../utils/indexedDB'
 import { useI18n } from '~/i18n'
 
-withDefaults(defineProps<{ settings: DBConfig }>(), {})
+const props = withDefaults(defineProps<{ settings: DBConfig, direction: string }>(), {})
 const emit = defineEmits<{
   close: []
 }>()
@@ -12,6 +12,10 @@ const { t } = useI18n()
 
 const isOpen = ref(false)
 
+const panelStyle = computed(() => ({
+  bottom: props.direction === 'left' ? '80px' : '20px',
+}))
+
 onMounted(() => {
   isOpen.value = true
 })
@@ -19,7 +23,7 @@ onMounted(() => {
 
 <template>
   <transition name="slide-up">
-    <div v-if="isOpen" class="panel-container">
+    <div v-if="isOpen" class="panel-container" :style="panelStyle">
       <div class="panel-header">
         <h3>{{ t('settings.title') }}</h3>
         <button class="close-btn" @click="emit('close')">

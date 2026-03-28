@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import type { DBConfig } from '../utils/indexedDB'
 import { type Locale, locales, useI18n } from '~/i18n'
 
-const props = defineProps<{ settings: DBConfig }>()
+const props = defineProps<{ settings: DBConfig, direction: string }>()
 const emit = defineEmits<{
   'close': []
   'update:settings': [value: DBConfig]
@@ -13,6 +13,10 @@ const { t } = useI18n()
 
 const isOpen = ref(false)
 const localSettings = ref<DBConfig>(JSON.parse(JSON.stringify(props.settings)))
+
+const panelStyle = computed(() => ({
+  bottom: props.direction === 'left' ? '80px' : '20px',
+}))
 
 watch(
   localSettings,
@@ -42,7 +46,7 @@ onMounted(() => {
 
 <template>
   <transition name="slide-up">
-    <div v-if="isOpen" class="panel-container">
+    <div v-if="isOpen" class="panel-container" :style="panelStyle">
       <div class="panel-header">
         <h3>{{ t('language.title') }}</h3>
         <button class="close-btn" @click="emit('close')">

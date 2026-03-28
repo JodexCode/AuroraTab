@@ -204,12 +204,14 @@ const isAnyPanelOpen = computed(
     <AppearancePanel
       v-if="showAppearance"
       v-model:settings="settings"
+      :direction="settings.toolbarDirection"
       @close="showAppearance = false"
     />
-    <SettingsPanel v-if="showSettings" :settings="settings" @close="showSettings = false" />
-    <LanguagePanel v-if="showLanguage" v-model:settings="settings" @close="showLanguage = false" />
+    <SettingsPanel v-if="showSettings" :settings="settings" :direction="settings.toolbarDirection" @close="showSettings = false" />
+    <LanguagePanel v-if="showLanguage" v-model:settings="settings" :direction="settings.toolbarDirection" @close="showLanguage = false" />
     <WallpaperPanel
       v-if="showWallpaper"
+      :direction="settings.toolbarDirection"
       @close="showWallpaper = false"
       @wallpaper-change="handleWallpaperChange"
     />

@@ -3,7 +3,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import type { DBConfig } from '../utils/indexedDB'
 import { useI18n } from '~/i18n'
 
-const props = defineProps<{ settings: DBConfig }>()
+const props = defineProps<{ settings: DBConfig, direction: string }>()
 const emit = defineEmits<{
   'close': []
   'update:settings': [value: DBConfig]
@@ -13,6 +13,11 @@ const { t } = useI18n()
 
 const isOpen = ref(false)
 const localSettings = ref<DBConfig>(JSON.parse(JSON.stringify(props.settings)))
+
+const panelStyle = computed(() => ({
+  '--panel-border-radius': `${localSettings.value.panels.borderRadius.value}${localSettings.value.panels.borderRadius.unit}`,
+  'bottom': props.direction === 'left' ? '80px' : '20px',
+}))
 
 watch(
   localSettings,
@@ -30,10 +35,6 @@ function updateSetting(keyPath: string, value: any) {
   }
   current[keys[keys.length - 1]] = value
 }
-
-const panelStyle = computed(() => ({
-  '--panel-border-radius': `${localSettings.value.panels.borderRadius.value}${localSettings.value.panels.borderRadius.unit}`,
-}))
 
 onMounted(() => {
   isOpen.value = true

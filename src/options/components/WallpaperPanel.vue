@@ -1,15 +1,20 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { type WallpaperItem, settingsDB } from '../utils/indexedDB'
 import { presets } from '../utils/presets'
 import { useI18n } from '~/i18n'
 
+const props = defineProps<{ direction: string }>()
 const emit = defineEmits(['close', 'wallpaper-change'])
 
 const { t } = useI18n()
 
 const isOpen = ref(false)
 const customWallpapers = ref<(WallpaperItem & { displayUrl: string })[]>([])
+
+const panelStyle = computed(() => ({
+  bottom: props.direction === 'left' ? '80px' : '20px',
+}))
 
 onMounted(async () => {
   isOpen.value = true
@@ -72,7 +77,7 @@ function selectCustom(wp: any) {
 
 <template>
   <transition name="slide-up">
-    <div v-if="isOpen" class="panel-container">
+    <div v-if="isOpen" class="panel-container" :style="panelStyle">
       <div class="panel-header">
         <h3>{{ t('wallpaper.title') }}</h3>
         <button class="close-btn" @click="emit('close')">
