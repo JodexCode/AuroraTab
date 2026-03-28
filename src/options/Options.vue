@@ -86,7 +86,14 @@ watch(
 onMounted(async () => {
   try {
     const savedSettings = await settingsDB.getSettings()
-    settings.value = { ...defaultSettings, ...savedSettings }
+
+    if (!savedSettings.wallpaper?.idOrUrl) {
+      settings.value = { ...defaultSettings }
+    }
+    else {
+      settings.value = { ...defaultSettings, ...savedSettings }
+    }
+
     setLocale(settings.value.language as Locale)
 
     await applyWallpaperSettings(settings.value.wallpaper)
