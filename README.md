@@ -91,7 +91,7 @@ pnpm run pack
 
 > **提示**：对于大多数用户，下载 **.zip** 文件并使用"开发者模式"加载是最稳定、直接的安装方式。
 
-> 📖 详细安装指南：[INSTALL.md](./docs/INSTALL.md)
+> 📖 详细安装以及使用指南：[INSTALL.md](./docs/INSTALL.md)
 
 ## 🛠️ 技术栈
 
