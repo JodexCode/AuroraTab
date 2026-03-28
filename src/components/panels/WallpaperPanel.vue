@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { type WallpaperItem, settingsDB } from '../utils/indexedDB'
-import { presets } from '../utils/presets'
+import { type WallpaperItem, settingsDB } from '~/utils/indexedDB'
+import { presets } from '~/utils/presets'
 import { useI18n } from '~/i18n'
 
 const props = defineProps<{ direction: string }>()

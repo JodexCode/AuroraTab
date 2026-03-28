@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
-import type { DBConfig } from '../utils/indexedDB'
+import type { DBConfig } from '~/utils/indexedDB'
 import { useI18n } from '~/i18n'
 import NumberInput from '~/components/NumberInput.vue'
 

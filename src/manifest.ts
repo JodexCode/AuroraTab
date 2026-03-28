@@ -12,7 +12,7 @@ export async function getManifest() {
     version: pkg.version,
     description: pkg.description,
     chrome_url_overrides: {
-      newtab: 'dist/options/index.html',
+      newtab: 'dist/newtab/index.html',
     },
     options_ui: {
       page: 'dist/options/index.html',

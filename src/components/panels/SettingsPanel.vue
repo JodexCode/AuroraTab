@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import type { DBConfig } from '../utils/indexedDB'
+import type { DBConfig } from '~/utils/indexedDB'
 import { useI18n } from '~/i18n'
 
 const props = withDefaults(defineProps<{ settings: DBConfig, direction: string }>(), {})
