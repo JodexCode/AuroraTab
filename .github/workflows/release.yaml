@@ -74,7 +74,7 @@ jobs:
             out/aurora-tab-*.zip
             out/aurora-tab-*.crx
             out/aurora-tab-*.xpi
-          name: Aurora Tab ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
           body: ${{ steps.read_note.outputs.body }}
           generate_release_notes: true
           fail_on_unmatched_files: true # 如果 files 里的文件没找到，直接让 Action 报错显志
