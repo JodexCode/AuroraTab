@@ -29,8 +29,10 @@ const panelMap: Record<string, Ref<boolean>> = {
 function openPanel(panel: keyof typeof panelMap) {
   if (!(panel in panelMap))
     return
+  const isCurrentlyOpen = panelMap[panel].value
   Object.values(panelMap).forEach(p => p.value = false)
-  panelMap[panel].value = true
+  if (!isCurrentlyOpen)
+    panelMap[panel].value = true
 }
 
 const wallpaperUrl = ref('')

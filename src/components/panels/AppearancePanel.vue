@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import '~/styles/panel-transition.css'
+
 import { computed, onMounted, ref, watch } from 'vue'
 import type { DBConfig } from '~/utils/indexedDB'
 import { useI18n } from '~/i18n'
@@ -43,7 +45,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <transition name="slide-up">
+  <transition name="panel">
     <div v-if="isOpen" class="panel-container" :style="panelStyle">
       <div class="panel-header">
         <h3>{{ t('appearance.title') }}</h3>
@@ -263,14 +265,4 @@ onMounted(() => {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.slide-up-enter-active,
-.slide-up-leave-active {
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.slide-up-enter-from,
-.slide-up-leave-to {
-  opacity: 0;
-  transform: translateY(20px) scale(0.95);
-}
 </style>

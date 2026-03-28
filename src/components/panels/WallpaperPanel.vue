@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import '~/styles/panel-transition.css'
+
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { type WallpaperItem, settingsDB } from '~/utils/indexedDB'
 import { presets } from '~/utils/presets'
@@ -76,7 +78,7 @@ function selectCustom(wp: any) {
 </script>
 
 <template>
-  <transition name="slide-up">
+  <transition name="panel">
     <div v-if="isOpen" class="panel-container" :style="panelStyle">
       <div class="panel-header">
         <h3>{{ t('wallpaper.title') }}</h3>
@@ -279,13 +281,4 @@ function selectCustom(wp: any) {
   transform: scale(1.1);
 }
 
-.slide-up-enter-active,
-.slide-up-leave-active {
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.slide-up-enter-from,
-.slide-up-leave-to {
-  opacity: 0;
-  transform: translateY(20px) scale(0.95);
-}
 </style>

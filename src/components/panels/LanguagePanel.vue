@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import '~/styles/panel-transition.css'
+
 import { computed, onMounted, ref, watch } from 'vue'
 import type { DBConfig } from '~/utils/indexedDB'
 import { type Locale, locales, useI18n } from '~/i18n'
@@ -180,14 +182,4 @@ onMounted(() => {
   color: rgba(255, 255, 255, 0.5);
 }
 
-.slide-up-enter-active,
-.slide-up-leave-active {
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.slide-up-enter-from,
-.slide-up-leave-to {
-  opacity: 0;
-  transform: translateY(20px) scale(0.95);
-}
 </style>
