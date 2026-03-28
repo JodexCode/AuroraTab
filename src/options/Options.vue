@@ -19,6 +19,18 @@ const showLanguage = ref(false)
 const showWallpaper = ref(false)
 const isLoading = ref(true)
 
+const panelMap: Record<string, Ref<boolean>> = {
+  appearance: showAppearance,
+  settings: showSettings,
+  language: showLanguage,
+  wallpaper: showWallpaper,
+}
+
+function openPanel(panel: keyof typeof panelMap) {
+  Object.values(panelMap).forEach(p => p.value = false)
+  panelMap[panel].value = true
+}
+
 const wallpaperUrl = ref('')
 const wallpaperType = ref('')
 
@@ -180,10 +192,10 @@ const isAnyPanelOpen = computed(
     <footer class="footer-toolbar">
       <Toolbar
         :direction="settings.toolbarDirection"
-        @open-appearance="showAppearance = true"
-        @open-settings="showSettings = true"
-        @open-language="showLanguage = true"
-        @open-wallpaper="showWallpaper = true"
+        @open-appearance="openPanel('appearance')"
+        @open-settings="openPanel('settings')"
+        @open-language="openPanel('language')"
+        @open-wallpaper="openPanel('wallpaper')"
       />
     </footer>
 
