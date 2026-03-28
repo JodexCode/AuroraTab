@@ -23,6 +23,12 @@ export default {
   },
   search: {
     placeholder: 'Search the web...',
+    useEngine: 'Search with {engine}',
+  },
+  engines: {
+    Bing: 'Bing',
+    Baidu: 'Baidu',
+    Google: 'Google',
   },
   wallpaper: {
     title: 'Wallpaper',

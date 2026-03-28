@@ -37,7 +37,7 @@ export function useI18n() {
     },
   })
 
-  const t = (key: string): string => {
+  const t = (key: string, params?: Record<string, string>): string => {
     const keys = key.split('.')
     let result: any = messages[currentLocale.value]
     for (const k of keys) {
@@ -48,7 +48,13 @@ export function useI18n() {
         return key
       }
     }
-    return typeof result === 'string' ? result : key
+    let text = typeof result === 'string' ? result : key
+    if (params) {
+      for (const [k, v] of Object.entries(params)) {
+        text = text.replace(new RegExp(`\\{${k}\\}`, 'g'), v)
+      }
+    }
+    return text
   }
 
   return {
@@ -63,7 +69,7 @@ export function useI18n() {
 
 export const i18n = {
   locale: currentLocale,
-  t: (key: string): string => {
+  t: (key: string, params?: Record<string, string>): string => {
     const keys = key.split('.')
     let result: any = messages[currentLocale.value]
     for (const k of keys) {
@@ -74,6 +80,12 @@ export const i18n = {
         return key
       }
     }
-    return typeof result === 'string' ? result : key
+    let text = typeof result === 'string' ? result : key
+    if (params) {
+      for (const [k, v] of Object.entries(params)) {
+        text = text.replace(new RegExp(`\\{${k}\\}`, 'g'), v)
+      }
+    }
+    return text
   },
 }

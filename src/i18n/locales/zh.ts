@@ -23,6 +23,12 @@ export default {
   },
   search: {
     placeholder: '搜索网页...',
+    useEngine: '使用 {engine} 搜索',
+  },
+  engines: {
+    Bing: '必应',
+    Baidu: '百度',
+    Google: '谷歌',
   },
   wallpaper: {
     title: '壁纸',

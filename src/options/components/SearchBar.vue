@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useI18n } from '~/i18n'
 
 const { t } = useI18n()
@@ -23,6 +23,11 @@ const engines = [
 ]
 
 const currentEngine = ref(engines[0])
+
+const placeholder = computed(() => {
+  const engineName = t(`engines.${currentEngine.value.name}`)
+  return t('search.useEngine', { engine: engineName })
+})
 const searchQuery = ref('')
 const isDropdownOpen = ref(false)
 const suggestions = ref<string[]>([])
@@ -190,7 +195,7 @@ onUnmounted(() => {
         v-model="searchQuery"
         type="text"
         class="search-input"
-        :placeholder="t('search.placeholder')"
+        :placeholder="placeholder"
         @keyup.enter="handleEnter"
         @keydown.down.prevent="moveDown"
         @keydown.up.prevent="moveUp"
