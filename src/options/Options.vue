@@ -129,7 +129,9 @@ function handleWallpaperChange(payload: any) {
   }
 }
 
-const isAnyPanelOpen = computed(() => showAppearance.value || showSettings.value || showLanguage.value || showWallpaper.value)
+const isAnyPanelOpen = computed(
+  () => showAppearance.value || showSettings.value || showLanguage.value || showWallpaper.value,
+)
 </script>
 
 <template>
@@ -140,11 +142,7 @@ const isAnyPanelOpen = computed(() => showAppearance.value || showSettings.value
 
     <div
       class="wallpaper-container"
-      :style="
-        wallpaperType === 'image/css-gradient'
-          ? { background: wallpaperUrl }
-          : {}
-      "
+      :style="wallpaperType === 'image/css-gradient' ? { background: wallpaperUrl } : {}"
     >
       <img
         v-if="
@@ -165,10 +163,7 @@ const isAnyPanelOpen = computed(() => showAppearance.value || showSettings.value
       />
     </div>
 
-    <main
-      class="main-content"
-      :class="{ blurred: isAnyPanelOpen }"
-    >
+    <main class="main-content" :class="{ blurred: isAnyPanelOpen }">
       <div class="search-wrapper">
         <SearchBar />
       </div>
@@ -189,16 +184,8 @@ const isAnyPanelOpen = computed(() => showAppearance.value || showSettings.value
       v-model:settings="settings"
       @close="showAppearance = false"
     />
-    <SettingsPanel
-      v-if="showSettings"
-      :settings="settings"
-      @close="showSettings = false"
-    />
-    <LanguagePanel
-      v-if="showLanguage"
-      v-model:settings="settings"
-      @close="showLanguage = false"
-    />
+    <SettingsPanel v-if="showSettings" :settings="settings" @close="showSettings = false" />
+    <LanguagePanel v-if="showLanguage" v-model:settings="settings" @close="showLanguage = false" />
     <WallpaperPanel
       v-if="showWallpaper"
       @close="showWallpaper = false"
@@ -217,8 +204,7 @@ const isAnyPanelOpen = computed(() => showAppearance.value || showSettings.value
   flex-direction: column;
   background-color: #1a1a1a;
   font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
-    Arial, sans-serif;
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 .loading-overlay {

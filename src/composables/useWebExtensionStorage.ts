@@ -86,10 +86,7 @@ export function useWebExtensionStorage<T>(
     options.serializer ??
     (() => {
       if (!serializerCache.has(type)) {
-        serializerCache.set(
-          type,
-          StorageSerializers[type as keyof typeof StorageSerializers],
-        )
+        serializerCache.set(type, StorageSerializers[type as keyof typeof StorageSerializers])
       }
       return serializerCache.get(type)!
     })()
@@ -99,9 +96,7 @@ export function useWebExtensionStorage<T>(
       return
 
     try {
-      const rawValue = event
-        ? event.newValue
-        : await storageInterface.getItem(key)
+      const rawValue = event ? event.newValue : await storageInterface.getItem(key)
       if (rawValue == null) {
         data.value = rawInit
         if (writeDefaults && rawInit !== null)
@@ -148,15 +143,11 @@ export function useWebExtensionStorage<T>(
     }
   }
 
-  const { pause: pauseWatch, resume: resumeWatch } = pausableWatch(
-    data,
-    write,
-    {
-      flush,
-      deep,
-      eventFilter,
-    },
-  )
+  const { pause: pauseWatch, resume: resumeWatch } = pausableWatch(data, write, {
+    flush,
+    deep,
+    eventFilter,
+  })
 
   if (listenToStorageChanges) {
     const listener = async (changes: Record<string, Storage.StorageChange>) => {

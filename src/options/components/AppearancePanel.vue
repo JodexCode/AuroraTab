@@ -46,12 +46,7 @@ onMounted(() => {
       <div class="panel-header">
         <h3>{{ t('appearance.title') }}</h3>
         <button class="close-btn" @click="emit('close')">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
             <path
               fill="currentColor"
               d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"
@@ -90,10 +85,7 @@ onMounted(() => {
               type="number"
               class="value-input"
               @input="
-                updateSetting(
-                  'searchBar.width.value',
-                  ($event.target as HTMLInputElement)?.value,
-                )
+                updateSetting('searchBar.width.value', ($event.target as HTMLInputElement)?.value)
               "
             >
             <div class="segmented-control">

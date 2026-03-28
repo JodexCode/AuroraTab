@@ -1,0 +1,26 @@
+{
+  "singleQuote": true,
+  "semi": false,
+  "trailingComma": "none",
+  "bracketSpacing": true,
+  "arrowParens": "avoid",
+  "useTabs": false,
+  "indentWidth": 2,
+  "printWidth": 120,
+  "languages": {
+    "vue": {
+      "indentScriptAndStyle": false
+    }
+  },
+  "ignorePatterns": [
+    "node_modules", // 默认已忽略，但显式写出更保险
+    "pnpm-lock.yaml", // 锁定文件，绝对不能格式化
+    "key.pem", // 敏感密钥文件，防止破坏格式
+    ".eslintcache", // 缓存文件
+    "*.tsbuildinfo", // TS 编译信息
+    "HISTORY.md", // 历史日志
+    "RELEASE_NOTES.md", // 发布日志
+    "LICENSE", // 法律文本
+    "extension/**" // 输出目录
+  ]
+}

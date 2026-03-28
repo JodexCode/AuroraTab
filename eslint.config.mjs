@@ -11,14 +11,14 @@ export default antfu({
     'vue/custom-event-name-casing': ['error', 'kebab-case'],
     'style/operator-linebreak': 'off',
     'no-console': 'warn',
-    'node/prefer-global/process': 'off',
+    'node/prefer-global/process': 'off'
   },
   overrides: [
     {
       files: ['scripts/**/*.ts'],
       rules: {
-        'no-console': 'off',
-      },
-    },
-  ],
+        'no-console': 'off'
+      }
+    }
+  ]
 })

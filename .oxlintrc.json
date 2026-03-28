@@ -1,0 +1,29 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "vue", "unicorn"],
+  "rules": {
+    "no-debugger": "error",
+    "no-console": ["warn", { "allow": ["error", "warn"] }],
+
+    /* TypeScript 相关 */
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/explicit-function-return-type": "off",
+
+    /* Vue 相关 */
+    "vue/multi-word-component-names": "off",
+    "vue/no-v-html": "off",
+
+    /* 最佳实践 - 禁止短横线命名 */
+    "unicorn/filename-case": "off",
+    "no-restricted-globals": ["error", "event"]
+  },
+  "overrides": [
+    {
+      "files": ["*.vue"],
+      "rules": {
+        "no-unused-vars": "off"
+      }
+    }
+  ]
+}

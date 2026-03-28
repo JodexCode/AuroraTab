@@ -34,46 +34,23 @@ function toggleToolbar() {
           :title="t('toolbar.appearance')"
           @click="emit('open-appearance')"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
             <path
               fill="currentColor"
               d="M12 20.8q-2.9 0-4.95-2.05T5 13.8q0-2.9 2.05-4.95T12 6.8q2.9 0 4.95 2.05T19 13.8q0 2.9-2.05 4.95T12 20.8m0-2q2.1 0 3.55-1.45T17 13.8q0-2.1-1.45-3.55T12 8.8q-2.1 0-3.55 1.45T7 13.8q0 2.1 1.45 3.55T12 18.8m0-2.5q-.95 0-1.625-.675T9.7 14.2q0-.95.675-1.625T12 11.9q.95 0 1.625.675T14.3 14.2q0 .95-.675 1.625T12 16.3"
             />
           </svg>
         </button>
-        <button
-          class="action-button"
-          :title="t('toolbar.language')"
-          @click="emit('open-language')"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-          >
+        <button class="action-button" :title="t('toolbar.language')" @click="emit('open-language')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
             <path
               fill="currentColor"
               d="M12 22q-2.25 0-3.9-1.425T6.65 17.65A8.75 8.75 0 0 1 6 12q0-2.25 1.1-4.35T9.1 4.2q.65-1.65 2.025-2.625T14.25 1h.05q2.1 0 3.625 1.575T19 6.35q.7 1.65.625 3.225T18.35 13.1q-1.25.65-2.7 1.025T12 15q-3.3 0-5.55-2.15T5 8.45q0-1.05.175-2.025t.575-1.875L8.3 8.3q-.45.75-.675 1.575T7.25 12q0 2.25 1.45 3.9T12 18.5q1.45 0 2.775-.525t2.225-1.475l1.85 1.85q-1.1 1-2.4 1.575T12 22m0-3.5q.65 0 1.075-.425T13.5 17q0-.65-.425-1.075T12 15.5q-.65 0-1.075.425T10.5 17q0 .65.425 1.075T12 18.5m0-5q.65 0 1.075-.425T13.5 12q0-.65-.425-1.075T12 10.5q-.65 0-1.075.425T10.5 12q0 .65.425 1.075T12 13.5m0-5q.65 0 1.075-.425T13.5 7q0-.65-.425-1.075T12 5.5q-.65 0-1.075.425T10.5 7q0 .65.425 1.075T12 8.5"
             />
           </svg>
         </button>
-        <button
-          class="action-button"
-          :title="t('toolbar.settings')"
-          @click="emit('open-settings')"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-          >
+        <button class="action-button" :title="t('toolbar.settings')" @click="emit('open-settings')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
             <path
               fill="currentColor"
               d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm-2-2h10V9.675l-3.6 3.6L8 11.5l-3 3z"
@@ -85,31 +62,14 @@ function toggleToolbar() {
           :title="`${t('toolbar.appearance')} - Wallpaper`"
           @click="emit('open-wallpaper')"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-          >
-            <path
-              fill="currentColor"
-              d="M2 4h20v16H2zm2 2v12h16V6z"
-            />
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M2 4h20v16H2zm2 2v12h16V6z" />
           </svg>
         </button>
       </div>
     </transition>
-    <button
-      class="toolbar-button"
-      :class="{ active: isToolbarOpen }"
-      @click="toggleToolbar"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-      >
+    <button class="toolbar-button" :class="{ active: isToolbarOpen }" @click="toggleToolbar">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
         <path
           fill="currentColor"
           d="M12 16.5q.65 0 1.075-.425T13.5 15q0-.65-.425-1.075T12 13.5q-.65 0-1.075.425T10.5 15q0 .65.425 1.075T12 16.5m0-5q.65 0 1.075-.425T13.5 10q0-.65-.425-1.075T12 8.5q-.65 0-1.075.425T10.5 10q0 .65.425 1.075T12 11.5m0-5q.65 0 1.075-.425T13.5 5q0-.65-.425-1.075T12 3.5q-.65 0-1.075.425T10.5 5q0 .65.425 1.075T12 6.5M4 21V3h16v18z"

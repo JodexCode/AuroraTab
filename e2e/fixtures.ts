@@ -40,9 +40,11 @@ export const test = base.extend<{
 export const expect = test.expect
 
 export function isDevArtifact() {
-  const manifest: Manifest.WebExtensionManifest = fs.readJsonSync(path.resolve(extensionPath, 'manifest.json'))
+  const manifest: Manifest.WebExtensionManifest = fs.readJsonSync(
+    path.resolve(extensionPath, 'manifest.json'),
+  )
   return Boolean(
-    typeof manifest.content_security_policy === 'object'
-    && manifest.content_security_policy.extension_pages?.includes('localhost'),
+    typeof manifest.content_security_policy === 'object' &&
+    manifest.content_security_policy.extension_pages?.includes('localhost'),
   )
 }

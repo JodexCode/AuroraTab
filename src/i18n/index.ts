@@ -32,7 +32,9 @@ const currentLocale = ref<Locale>(getDeviceLocale())
 export function useI18n() {
   const locale = computed({
     get: () => currentLocale.value,
-    set: (val: Locale) => { currentLocale.value = val },
+    set: (val: Locale) => {
+      currentLocale.value = val
+    },
   })
 
   const t = (key: string): string => {
@@ -53,7 +55,9 @@ export function useI18n() {
     locale,
     t,
     locales,
-    setLocale: (locale: Locale) => { currentLocale.value = locale },
+    setLocale: (locale: Locale) => {
+      currentLocale.value = locale
+    },
   }
 }
 
