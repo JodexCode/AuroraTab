@@ -36,6 +36,8 @@ function decrease() {
 function handleInput(event: Event) {
   const target = event.target as HTMLInputElement
   let value = Number(target.value)
+  if (Number.isNaN(value))
+    value = props.min ?? 0
   if (props.min !== undefined && value < props.min)
     value = props.min
   if (props.max !== undefined && value > props.max)
