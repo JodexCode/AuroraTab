@@ -1,28 +1,29 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from '~/i18n'
+import { engines, type EngineName } from '~/utils/searchEngines'
+
+const props = defineProps<{
+  searchEngine: EngineName
+}>()
 
 const { t } = useI18n()
 
-const engines = [
-  {
-    name: 'Bing',
-    url: 'https://www.bing.com/search?q=',
-    icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path fill="#008373" d="M22.094 17.344l-4.75 2.656v5.875l7.938-4.438zM17.344 3.75l-7.938 10.375v11.875l4.75-2.656v-5.875l7.938-4.438z"/></svg>',
-  },
-  {
-    name: 'Baidu',
-    url: 'https://www.baidu.com/s?wd=',
-    icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#2932e1" d="M15.26 1.1c.14 0 .27.05.38.14.34.28.37.78.07 1.11l-2.03 2.22c-.22.24-.55.35-.87.29l-2.5-.43c-.32-.05-.63.07-.84.31l-2.03 2.22c-.28.31-.76.33-1.07.06-.31-.27-.33-.75-.06-1.06l2.03-2.22c.22-.24.55-.35.87-.29l2.5.43c.32.05.63-.07.84-.31l2.03-2.22c.11-.12.24-.18.38-.18zm1.96 4.31c.21 0 .42.09.57.26.31.33.29.85-.06 1.16l-4.34 3.86c-.23.2-.53.28-.83.21l-3.33-.78c-.3-.07-.57.03-.78.23l-4.34 3.86c-.34.3-.86.27-1.16-.08-.3-.35-.27-.86.08-1.16l4.34-3.86c.23-.2.53-.28.83-.21l3.33.78c.3.07.57-.03.78-.23l4.34-3.86c.17-.15.39-.22.61-.22zm3.32 4.13c.24 0 .47.11.62.31.28.37.21.9-.17 1.18l-5.63 4.2c-.24.18-.54.23-.82.14l-3.88-1.17c-.28-.08-.58-.02-.79.17l-5.63 4.2c-.38.28-.9.2-1.18-.18-.28-.38-.2-.9.18-1.18l5.63-4.2c.24-.18.54-.23.82-.14l3.88 1.17c.28.08.58.02.79-.17l5.63-4.2c.18-.14.36-.21.55-.21zM24 14.5c.27 0 .52.13.68.36.26.39.15.92-.25 1.18l-6.84 4.51c-.24.16-.53.2-.8.11l-4.31-1.55c-.27-.1-.58-.04-.8.1l-6.84 4.51c-.4.26-.93.15-1.19-.25-.26-.4-.15-.93.25-1.19l6.84-4.51c.24-.16.53-.2.8-.11l4.31 1.55c.27.1.58.04.8-.1l6.84-4.51c.18-.12.37-.18.57-.18z"/></svg>',
-  },
-  {
-    name: 'Google',
-    url: 'https://www.google.com/search?q=',
-    icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/></svg>',
-  },
-]
+const emit = defineEmits<{
+  'update:searchEngine': [value: EngineName]
+}>()
 
-const currentEngine = ref(engines[0])
+const currentEngine = ref(
+  engines.find(e => e.name === props.searchEngine) || engines[0],
+)
+
+watch(
+  () => props.searchEngine,
+  newEngine => {
+    const engine = engines.find(e => e.name === newEngine)
+    if (engine) currentEngine.value = engine
+  },
+)
 
 const placeholder = computed(() => {
   const engineName = t(`engines.${currentEngine.value.name}`)
@@ -45,11 +46,9 @@ async function fetchSuggestions(query: string) {
     let url = ''
     if (currentEngine.value.name === 'Bing') {
       url = `https://api.bing.com/osjson.aspx?query=${encodeURIComponent(query)}`
-    }
-    else if (currentEngine.value.name === 'Baidu') {
+    } else if (currentEngine.value.name === 'Baidu') {
       url = `https://www.baidu.com/sugrec?prod=pc&wd=${encodeURIComponent(query)}`
-    }
-    else if (currentEngine.value.name === 'Google') {
+    } else if (currentEngine.value.name === 'Google') {
       url = `https://suggestqueries.google.com/complete/search?client=firefox&q=${encodeURIComponent(query)}`
     }
 
@@ -62,19 +61,16 @@ async function fetchSuggestions(query: string) {
           .map((item: any) => item.q)
           .filter((v: any): v is string => !!v)
           .slice(0, 8)
-      }
-      else {
+      } else {
         suggestions.value = []
       }
-    }
-    else {
+    } else {
       // OpenSearch format is usually [query, [suggestions]]
       if (Array.isArray(data) && data[1]) {
         suggestions.value = data[1].slice(0, 8)
       }
     }
-  }
-  catch (error) {
+  } catch (error) {
     console.error('Failed to fetch suggestions:', error)
     suggestions.value = []
   }
@@ -89,24 +85,25 @@ function onInput() {
 }
 
 function moveDown() {
-  if (suggestions.value.length === 0)
-    return
-  selectedSuggestionIndex.value = (selectedSuggestionIndex.value + 1) % suggestions.value.length
+  if (suggestions.value.length === 0) return
+  selectedSuggestionIndex.value =
+    (selectedSuggestionIndex.value + 1) % suggestions.value.length
 }
 
 function moveUp() {
-  if (suggestions.value.length === 0)
-    return
+  if (suggestions.value.length === 0) return
   if (selectedSuggestionIndex.value <= 0) {
     selectedSuggestionIndex.value = suggestions.value.length - 1
-  }
-  else {
+  } else {
     selectedSuggestionIndex.value--
   }
 }
 
 function handleEnter() {
-  if (selectedSuggestionIndex.value >= 0 && suggestions.value[selectedSuggestionIndex.value]) {
+  if (
+    selectedSuggestionIndex.value >= 0 &&
+    suggestions.value[selectedSuggestionIndex.value]
+  ) {
     searchQuery.value = suggestions.value[selectedSuggestionIndex.value]
   }
   search()
@@ -119,7 +116,8 @@ function selectSuggestion(suggestion: string) {
 
 function search() {
   if (searchQuery.value.trim()) {
-    window.location.href = currentEngine.value.url + encodeURIComponent(searchQuery.value)
+    window.location.href =
+      currentEngine.value.url + encodeURIComponent(searchQuery.value)
     suggestions.value = []
     isDropdownOpen.value = false
   }
@@ -132,6 +130,7 @@ function toggleDropdown() {
 function selectEngine(engine: (typeof engines)[0]) {
   currentEngine.value = engine
   isDropdownOpen.value = false
+  emit('update:searchEngine', engine.name)
   fetchSuggestions(searchQuery.value) // Refresh suggestions for the new engine
 }
 
@@ -203,10 +202,13 @@ onUnmounted(() => {
         @focus="isInputFocused = true"
         @blur="handleBlur"
         @click.stop
-      >
+      />
       <!-- Suggestions List -->
       <transition name="fade">
-        <div v-if="suggestions.length > 0 && isInputFocused" class="suggestions-container">
+        <div
+          v-if="suggestions.length > 0 && isInputFocused"
+          class="suggestions-container"
+        >
           <div
             v-for="(suggestion, index) in suggestions"
             :key="index"
@@ -233,7 +235,12 @@ onUnmounted(() => {
       </transition>
     </div>
     <button class="search-button" @click="search">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+      >
         <path
           fill="currentColor"
           d="m19.6 21l-6.3-6.3q-.75.6-1.725.95T9.5 16q-2.725 0-4.612-1.888T3 9.5q0-2.725 1.888-4.612T9.5 3q2.725 0 4.612 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l6.3 6.3zM9.5 14q1.875 0 3.188-1.312T14 9.5q0-1.875-1.312-3.187T9.5 5Q7.625 5 6.313 6.313T5 9.5q0 1.875 1.313 3.188T9.5 14"

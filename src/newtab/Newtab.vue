@@ -41,6 +41,7 @@ let currentBlobUrl = ''
 const defaultSettings: DBConfig = {
   toolbarDirection: 'left',
   language: getDeviceLocale(),
+  searchEngine: 'Bing',
   searchBar: {
     width: { value: 600, unit: 'px' },
     borderRadius: { value: 24, unit: 'px' },
@@ -187,7 +188,10 @@ const isAnyPanelOpen = computed(
 
     <main class="main-content" :class="{ blurred: isAnyPanelOpen }">
       <div class="search-wrapper">
-        <SearchBar />
+        <SearchBar
+          :search-engine="settings.searchEngine"
+          @update:search-engine="settings.searchEngine = $event"
+        />
       </div>
     </main>
 

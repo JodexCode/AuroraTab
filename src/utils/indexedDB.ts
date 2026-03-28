@@ -3,6 +3,8 @@ const DB_VERSION = 3 // 升级版本号，触发 onupgradeneeded
 const STORE_NAME = 'settings'
 const WALLPAPER_STORE = 'wallpapers' // 新增壁纸仓库
 
+import type { EngineName } from './searchEngines'
+
 // 新增壁纸数据类型
 export interface WallpaperItem {
   id: string
@@ -14,6 +16,7 @@ export interface WallpaperItem {
 export interface DBConfig {
   toolbarDirection: 'left' | 'up'
   language: 'en' | 'zh'
+  searchEngine: EngineName
   searchBar: {
     width: { value: number, unit: 'px' | '%' }
     borderRadius: { value: number, unit: 'px' | '%' }
@@ -32,6 +35,7 @@ export interface DBConfig {
 const defaultConfig: DBConfig = {
   toolbarDirection: 'left',
   language: 'en',
+  searchEngine: 'Bing',
   searchBar: {
     width: { value: 600, unit: 'px' },
     borderRadius: { value: 24, unit: 'px' },
