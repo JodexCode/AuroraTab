@@ -8,6 +8,7 @@ import SettingsPanel from './components/SettingsPanel.vue'
 import LanguagePanel from './components/LanguagePanel.vue'
 import WallpaperPanel from './components/WallpaperPanel.vue'
 import { type DBConfig, settingsDB } from './utils/indexedDB'
+import { presets } from './utils/presets'
 import { type Locale, getDeviceLocale, useI18n } from '~/i18n'
 
 const { setLocale } = useI18n()
@@ -23,11 +24,6 @@ const wallpaperType = ref('')
 
 let currentBlobUrl = ''
 
-const defaultPreset = {
-  css: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #2193b0 100%)',
-  type: 'image/css-gradient',
-}
-
 const defaultSettings: DBConfig = {
   toolbarDirection: 'left',
   language: getDeviceLocale(),
@@ -40,8 +36,8 @@ const defaultSettings: DBConfig = {
   },
   wallpaper: {
     type: 'preset',
-    idOrUrl: '',
-    mimeType: '',
+    idOrUrl: presets[0].id,
+    mimeType: presets[0].type,
   },
 }
 
@@ -62,16 +58,11 @@ async function applyWallpaperSettings(wpConfig: DBConfig['wallpaper']) {
     currentBlobUrl = ''
   }
 
-  if (!wpConfig.idOrUrl) {
-    wallpaperType.value = defaultPreset.type
-    wallpaperUrl.value = defaultPreset.css
-    return
-  }
-
   wallpaperType.value = wpConfig.mimeType
 
   if (wpConfig.type === 'preset') {
-    wallpaperUrl.value = wpConfig.idOrUrl
+    const preset = presets.find(p => p.id === wpConfig.idOrUrl)
+    wallpaperUrl.value = preset?.css || presets[0].css
   }
   else if (wpConfig.type === 'custom') {
     const wpItem = await settingsDB.getWallpaper(wpConfig.idOrUrl)

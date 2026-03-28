@@ -1,64 +1,11 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 import { type WallpaperItem, settingsDB } from '../utils/indexedDB'
+import { presets } from '../utils/presets'
 
 const emit = defineEmits(['close', 'wallpaper-change'])
 const isOpen = ref(false)
 const customWallpapers = ref<(WallpaperItem & { displayUrl: string })[]>([])
-
-// --- 核心修改：定义五套高质量 CSS 渐变色预设 ---
-// 我们使用自定义的 mimeType: 'image/css-gradient' 来标记
-const presets = [
-  {
-    id: 'preset-deep-ocean',
-    name: '深海流光',
-    // 蓝绿交织，饱和度适中，像深海中的荧光
-    css: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #2193b0 100%)',
-    type: 'image/css-gradient',
-  },
-  {
-    id: 'preset-forest-life',
-    name: '森林呼吸',
-    // 沉稳的苔藓绿到青蓝色，极度护眼
-    css: 'linear-gradient(120deg, #134E5E 0%, #71B280 100%)',
-    type: 'image/css-gradient',
-  },
-  {
-    id: 'preset-mystic-purple',
-    name: '幻紫幽邃',
-    // 深紫、深蓝与暗红的交织，极具生命力且不刺眼
-    css: 'radial-gradient(at 0% 0%, rgba(78, 84, 200, 0.6) 0, transparent 50%), radial-gradient(at 100% 0%, rgba(143, 148, 251, 0.5) 0, transparent 50%), radial-gradient(at 50% 100%, rgba(35, 37, 38, 1) 0, transparent 80%), #2c3e50',
-    type: 'image/css-gradient',
-  },
-  {
-    id: 'preset-emerald-flow',
-    name: '翡翠流转',
-    // 渐变在对角线流动，色彩丰富但不杂乱
-    css: 'linear-gradient(135deg, #004d40 0%, #00acc1 50%, #80deea 100%)',
-    type: 'image/css-gradient',
-  },
-  {
-    id: 'preset-sunset-vibe',
-    name: '暮色弥漫',
-    // 暖色调但压低了亮度，模拟日落后的余晖
-    css: 'radial-gradient(at 80% 20%, rgba(255, 126, 95, 0.4) 0, transparent 50%), radial-gradient(at 20% 80%, rgba(254, 180, 123, 0.3) 0, transparent 50%), #3e5151',
-    type: 'image/css-gradient',
-  },
-  {
-    id: 'preset-deep-nebula',
-    name: '深空星云',
-    // 沉稳的暗蓝色底色，带有极光绿的边缘
-    css: 'radial-gradient(circle at 10% 20%, rgba(0, 150, 136, 0.3) 0%, transparent 40%), radial-gradient(circle at 90% 80%, rgba(76, 175, 80, 0.2) 0%, transparent 40%), #121f1f',
-    type: 'image/css-gradient',
-  },
-  {
-    id: 'preset-modern-gray',
-    name: '现代极简',
-    // 并不是纯灰，而是带有一点蓝紫调的高级冷灰
-    css: 'linear-gradient(135deg, #434343 0%, #243b55 100%)',
-    type: 'image/css-gradient',
-  },
-]
 
 onMounted(async () => {
   isOpen.value = true
@@ -104,7 +51,7 @@ async function removeWallpaper(id: string) {
 function selectPreset(preset: any) {
   emit('wallpaper-change', {
     type: 'preset',
-    idOrUrl: preset.css, // 现在这里存的是 CSS 字符串
+    idOrUrl: preset.id,
     mimeType: preset.type,
   })
 }
