@@ -3,7 +3,7 @@
   "plugins": ["typescript", "vue", "unicorn"],
   "rules": {
     "no-debugger": "error",
-    "no-console": ["warn", { "allow": ["error", "warn"] }],
+    "no-console": "off",
 
     /* TypeScript 相关 */
     "@typescript-eslint/no-explicit-any": "off",
@@ -23,6 +23,12 @@
       "files": ["*.vue"],
       "rules": {
         "no-unused-vars": "off"
+      }
+    },
+    {
+      "files": ["src/manifest.ts"],
+      "rules": {
+        "no-constant-condition": "off"
       }
     }
   ]
