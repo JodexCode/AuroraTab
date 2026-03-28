@@ -35,8 +35,8 @@
 - 提取面板通用样式到独立 CSS 文件
 - 升级 GitHub Actions Node.js 版本至 24
 
-> 💡 查看完整更新日志：[RELEASE_NOTES.md](./RELEASE_NOTES.md)
-> 📜 历史版本记录：[HISTORY.md](./HISTORY.md)
+> 💡 查看完整更新日志：[RELEASE_NOTES.md](./docs/RELEASE_NOTES.md)
+> 📜 历史版本记录：[HISTORY.md](./docs/HISTORY.md)
 
 ## 🚀 开发与构建
 
