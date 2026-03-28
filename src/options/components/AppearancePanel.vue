@@ -2,6 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import type { DBConfig } from '../utils/indexedDB'
 import { useI18n } from '~/i18n'
+import NumberInput from '~/components/NumberInput.vue'
 
 const props = defineProps<{ settings: DBConfig, direction: string }>()
 const emit = defineEmits<{
@@ -81,14 +82,10 @@ onMounted(() => {
             <span>{{ t('appearance.searchBarWidth') }}</span>
           </div>
           <div class="input-group">
-            <input
-              v-model.number="localSettings.searchBar.width.value"
-              type="number"
-              class="value-input"
-              @input="
-                updateSetting('searchBar.width.value', ($event.target as HTMLInputElement)?.value)
-              "
-            >
+            <NumberInput
+              v-model="localSettings.searchBar.width.value"
+              :min="1"
+            />
             <div class="segmented-control">
               <button
                 :class="{ active: localSettings.searchBar.width.unit === 'px' }"
@@ -111,17 +108,10 @@ onMounted(() => {
             <span>{{ t('appearance.searchBarRadius') }}</span>
           </div>
           <div class="input-group">
-            <input
-              v-model.number="localSettings.searchBar.borderRadius.value"
-              type="number"
-              class="value-input"
-              @input="
-                updateSetting(
-                  'searchBar.borderRadius.value',
-                  ($event.target as HTMLInputElement)?.value,
-                )
-              "
-            >
+            <NumberInput
+              v-model="localSettings.searchBar.borderRadius.value"
+              :min="0"
+            />
             <div class="segmented-control">
               <button
                 :class="{
@@ -148,17 +138,10 @@ onMounted(() => {
             <span>{{ t('appearance.panelRadius') }}</span>
           </div>
           <div class="input-group">
-            <input
-              v-model.number="localSettings.panels.borderRadius.value"
-              type="number"
-              class="value-input"
-              @input="
-                updateSetting(
-                  'panels.borderRadius.value',
-                  ($event.target as HTMLInputElement)?.value,
-                )
-              "
-            >
+            <NumberInput
+              v-model="localSettings.panels.borderRadius.value"
+              :min="0"
+            />
             <div class="segmented-control">
               <button
                 :class="{
@@ -249,15 +232,12 @@ onMounted(() => {
   gap: 8px;
 }
 
-.value-input {
-  flex-grow: 1;
-  background-color: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  color: white;
-  padding: 8px 12px;
-  font-size: 14px;
-  outline: none;
+.input-group :deep(.number-input-container) {
+  flex: 1;
+}
+
+.segmented-control {
+  order: 2;
 }
 
 .segmented-control {
