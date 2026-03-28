@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import '~/styles/panel-transition.css'
+import '~/styles/panel.css'
 import type { DBConfig } from '~/utils/indexedDB'
 import { useI18n } from '~/i18n'
 
@@ -46,55 +47,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.panel-container {
-  position: fixed;
-  bottom: 20px;
-  right: 80px;
-  width: 340px;
-  background-color: rgba(40, 40, 40, 0.8);
-  backdrop-filter: blur(30px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  color: white;
-  z-index: 1000;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-  overflow: hidden;
-}
-
-.panel-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.panel-header h3 {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.close-btn {
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.5);
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 50%;
-  display: flex;
-  transition: all 0.2s;
-}
-
-.close-btn:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: white;
-}
-
-.panel-content {
-  padding: 20px;
-}
-
 .empty-state {
   text-align: center;
   padding: 40px 20px;

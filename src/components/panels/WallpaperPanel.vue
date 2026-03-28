@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import '~/styles/panel-transition.css'
+import '~/styles/panel.css'
 
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { type WallpaperItem, settingsDB } from '~/utils/indexedDB'
@@ -79,7 +80,7 @@ function selectCustom(wp: any) {
 
 <template>
   <transition name="panel">
-    <div v-if="isOpen" class="panel-container" :style="panelStyle">
+    <div v-if="isOpen" class="panel-container panel-wallpaper" :style="panelStyle">
       <div class="panel-header">
         <h3>{{ t('wallpaper.title') }}</h3>
         <button class="close-btn" @click="emit('close')">
@@ -142,46 +143,10 @@ function selectCustom(wp: any) {
 </template>
 
 <style scoped>
-/* 原有样式保持不变 */
-.panel-container {
-  position: fixed;
-  bottom: 20px;
-  right: 80px;
-  width: 340px;
-  max-height: 80vh;
-  background-color: rgba(40, 40, 40, 0.85);
-  backdrop-filter: blur(30px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  z-index: 1000;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-}
-.panel-header {
-  padding: 16px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.panel-header h3 {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-}
 .close-btn {
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.5);
-  cursor: pointer;
   font-size: 20px;
-  padding: 4px;
 }
-.close-btn:hover {
-  color: white;
-}
+
 .scroll-container {
   padding: 20px;
   overflow-y: auto;

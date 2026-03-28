@@ -25,15 +25,17 @@ defineProps<{
   justify-content: center;
   align-items: center;
   transition: all 0.2s ease;
+  z-index: 10001;
 }
 
 .action-button:hover {
   background-color: rgba(255, 255, 255, 0.2);
+  z-index: 10001;
 }
 
 .tooltip {
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.85);
   color: white;
   padding: 6px 12px;
   border-radius: 6px;
@@ -45,7 +47,7 @@ defineProps<{
   left: 50%;
   bottom: calc(100% + 8px);
   transition: opacity 0.2s ease, transform 0.2s ease;
-  z-index: 1000;
+  z-index: 10002;
 }
 
 .action-button:hover .tooltip {
@@ -60,6 +62,6 @@ defineProps<{
   left: 50%;
   transform: translateX(-50%);
   border: 5px solid transparent;
-  border-top-color: rgba(0, 0, 0, 0.8);
+  border-top-color: rgba(0, 0, 0, 0.85);
 }
 </style>

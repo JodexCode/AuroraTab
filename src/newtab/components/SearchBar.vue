@@ -263,8 +263,6 @@ onUnmounted(() => {
   isolation: isolate;
   transition: all 0.25s ease;
   background-color: rgba(0, 0, 0, 0.1);
-  /* 会引起搜索框闪烁，不清楚怎么解决，暂时取消该效果 */
-  /* backdrop-filter: blur(20px) saturate(180%); */
 }
 
 .engine-selector {
