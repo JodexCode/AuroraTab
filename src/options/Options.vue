@@ -87,7 +87,7 @@ onMounted(async () => {
   try {
     const savedSettings = await settingsDB.getSettings()
 
-    if (!savedSettings.wallpaper?.idOrUrl) {
+    if (!savedSettings?.wallpaper?.idOrUrl) {
       settings.value = { ...defaultSettings }
     }
     else {
