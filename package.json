@@ -1,7 +1,7 @@
 {
   "name": "aurora-tab",
   "displayName": "Aurora Tab",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "packageManager": "pnpm@9.7.1",
   "description": "一个简约、美观、实用的浏览器新标签页插件",
