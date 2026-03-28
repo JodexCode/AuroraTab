@@ -3,6 +3,7 @@ export default {
     appearance: '外观',
     settings: '设置',
     language: '语言',
+    wallpaper: '壁纸',
   },
   appearance: {
     title: '外观',

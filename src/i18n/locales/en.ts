@@ -3,6 +3,7 @@ export default {
     appearance: 'Appearance',
     settings: 'Settings',
     language: 'Language',
+    wallpaper: 'Wallpaper',
   },
   appearance: {
     title: 'Appearance',
