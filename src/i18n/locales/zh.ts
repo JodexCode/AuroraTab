@@ -20,6 +20,15 @@ export default {
     title: '语言',
     select: '选择语言',
   },
+  search: {
+    placeholder: '搜索网页...',
+  },
+  wallpaper: {
+    title: '壁纸',
+    presets: '预设',
+    custom: '自定义',
+    upload: '上传',
+  },
   common: {
     close: '关闭',
     px: '像素',

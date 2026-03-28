@@ -20,6 +20,15 @@ export default {
     title: 'Language',
     select: 'Select Language',
   },
+  search: {
+    placeholder: 'Search the web...',
+  },
+  wallpaper: {
+    title: 'Wallpaper',
+    presets: 'Presets',
+    custom: 'Custom',
+    upload: 'Upload',
+  },
   common: {
     close: 'Close',
     px: 'px',

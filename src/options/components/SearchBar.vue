@@ -1,6 +1,8 @@
 <script setup lang="ts">
-// 部分功能实现效果没达到预期，但不是关键功能，暂时搁置
 import { onMounted, onUnmounted, ref } from 'vue'
+import { useI18n } from '~/i18n'
+
+const { t } = useI18n()
 
 const engines = [
   {
@@ -188,7 +190,7 @@ onUnmounted(() => {
         v-model="searchQuery"
         type="text"
         class="search-input"
-        placeholder="Search the web..."
+        :placeholder="t('search.placeholder')"
         @keyup.enter="handleEnter"
         @keydown.down.prevent="moveDown"
         @keydown.up.prevent="moveUp"

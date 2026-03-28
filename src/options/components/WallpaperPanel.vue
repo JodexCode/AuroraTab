@@ -2,8 +2,12 @@
 import { onMounted, onUnmounted, ref } from 'vue'
 import { type WallpaperItem, settingsDB } from '../utils/indexedDB'
 import { presets } from '../utils/presets'
+import { useI18n } from '~/i18n'
 
 const emit = defineEmits(['close', 'wallpaper-change'])
+
+const { t } = useI18n()
+
 const isOpen = ref(false)
 const customWallpapers = ref<(WallpaperItem & { displayUrl: string })[]>([])
 
@@ -70,7 +74,7 @@ function selectCustom(wp: any) {
   <transition name="slide-up">
     <div v-if="isOpen" class="panel-container">
       <div class="panel-header">
-        <h3>Wallpaper Settings</h3>
+        <h3>{{ t('wallpaper.title') }}</h3>
         <button class="close-btn" @click="emit('close')">
           ×
         </button>
@@ -78,7 +82,7 @@ function selectCustom(wp: any) {
 
       <div class="panel-content scroll-container">
         <h4 class="section-title">
-          Presets (Gradients)
+          {{ t('wallpaper.presets') }}
         </h4>
         <div class="wallpaper-grid">
           <div
@@ -92,7 +96,7 @@ function selectCustom(wp: any) {
         </div>
 
         <h4 class="section-title" style="margin-top: 20px">
-          Custom (Images/Videos)
+          {{ t('wallpaper.custom') }}
         </h4>
         <div class="wallpaper-grid">
           <label class="wp-item upload-btn">
